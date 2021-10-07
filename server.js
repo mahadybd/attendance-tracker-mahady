@@ -95,12 +95,12 @@ const islogedin = (req, res, next) => {
  if (req.session.isAuth) {
   res.redirect('/dashboard');
  } else {
-  res.redirect('/logout');
+  res.redirect('/login');
  }
 };
 
 //landing Page
-app.get('/', islogedin, (req, res) => {
+app.get('/', (req, res) => {
  res.render('login', { title: 'Attendance Tracker' });
 });
 
@@ -178,19 +178,7 @@ app.post('/register', async (req, res) => {
  });
 
  await user.save();
-
  res.redirect('/login');
-
- //  try {
- //   users.push({
- //    id: Date().now().toString(),
- //    name: req.body.name,
- //    email: req.body.email,
- //    password: hashedPassword
- //   });
- //  } catch {
- //   res.redirect('/register');
- //  }
 });
 
 app.post('/logout', (req, res) => {
