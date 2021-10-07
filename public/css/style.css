@@ -1,0 +1,285 @@
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+:root {
+ --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+* {
+ box-sizing: border-box;
+}
+
+body {
+ background-color: #f7f7f7;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ min-height: 100vh;
+ margin: 0;
+ font-family: 'Lato', sans-serif;
+}
+
+.container {
+ margin: 30px auto;
+ width: 350px;
+}
+.current-date-time {
+ display: block;
+ padding: 20px 0;
+ border-bottom: 1px solid #bbb;
+ font-weight: bold;
+}
+.current_date {
+ display: flex;
+ float: left;
+}
+.current_time {
+ display: flex;
+ float: right;
+}
+
+h1 {
+ margin-top: 8px;
+}
+header {
+ margin-top: 10px;
+ border-bottom: 1px solid #bbb;
+ font-size: 1.3em;
+ font-weight: bold;
+ display: inline-block;
+}
+
+h3 {
+ border-bottom: 1px solid #bbb;
+ padding-bottom: 3px;
+ margin: 10px 0 2px;
+}
+
+h4 {
+ margin: 0;
+ text-transform: uppercase;
+}
+h5 {
+ padding: 0;
+ margin: 0;
+}
+
+.totalTime {
+ text-align: right;
+ font-weight: bold;
+ background-color: #c1daff;
+ padding: 2px 2px 2px;
+}
+
+.timer-controller {
+ display: flex;
+ justify-content: space-between;
+}
+.inc-exp-container {
+ background-color: #fff;
+ box-shadow: var(--box-shadow);
+ padding: 20px;
+ display: flex;
+ justify-content: space-between;
+ margin: 0;
+}
+
+.inc-exp-container > div {
+ flex: 1;
+ text-align: center;
+}
+
+.inc-exp-container > div:first-of-type {
+ border-right: 1px solid #dedede;
+}
+
+.money {
+ font-size: 20px;
+ letter-spacing: 1px;
+ margin: 5px 0;
+}
+
+.money.plus {
+ color: #0dc459;
+}
+
+.money.minus {
+ color: #ee2711;
+}
+
+label {
+ display: inline-block;
+ margin: 8px 0 2px 0;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='number'] {
+ border: 1px solid #dedede;
+ border-radius: 2px;
+ display: block;
+ font-size: 10px;
+ padding: 10px;
+ width: 100%;
+}
+
+.time_type {
+ font-weight: bold;
+ margin: 5px 0;
+ padding: 10px;
+ font-size: 1.3em;
+ display: block;
+}
+.btn {
+ cursor: pointer;
+ width: 35%;
+ display: flex;
+ justify-content: space-between;
+ margin: 5px 0;
+ padding: 5px;
+ font-size: 16x;
+ display: block;
+ color: #fff;
+ background-color: #0d8ac4;
+ box-shadow: var(--box-shadow);
+ border: 0;
+ border-radius: 2px;
+}
+.login-btn {
+ float: left;
+ margin-right: 10px;
+}
+
+.logout-btn {
+ float: right;
+ width: 5em;
+}
+
+.disabled {
+ pointer-events: none;
+ background-color: #bbb;
+}
+
+.btn:focus,
+.delete-btn:focus {
+ outline: 0;
+}
+
+.list {
+ list-style-type: none;
+ padding: 0;
+ margin-bottom: 5px 0 10px 0;
+}
+
+.list li {
+ background-color: #fff;
+ box-shadow: var(--box-shadow);
+ color: #333;
+ display: flex;
+ justify-content: space-between;
+ position: relative;
+ padding: 3px;
+ margin: 3px 0;
+}
+
+.delete-btn {
+ background-color: #e74c3c;
+ border: 0;
+ color: #fff;
+ font-size: 16px;
+ line-height: 20px;
+ cursor: pointer;
+ position: absolute;
+ top: 50%;
+ left: 0;
+ transform: translate(-100%, -50%);
+ opacity: 0;
+ transition: opacity 0.3s ease;
+}
+
+.login-area {
+ width: 24em;
+ position: relative;
+ margin: 35px 0 20px 0;
+ padding: 1em;
+ background-color: #d5e3f8;
+ box-shadow: var(--box-shadow);
+ line-height: 20px;
+}
+.login-area-cancle-btn {
+ position: absolute;
+ z-index: 999;
+ top: 0;
+ right: 0;
+ margin: 5px 5px 0 0;
+ padding: 4px 8px 4px 8px;
+ background-color: #e74c3c;
+ color: #fff;
+ box-shadow: var(--box-shadow);
+ border: none;
+ border-radius: 3px;
+ font-weight: bold;
+}
+.login-area-cancle-btn:hover {
+ cursor: pointer;
+}
+nav {
+ margin-bottom: 20px 0 20px 0;
+}
+
+.login-menu {
+ float: right;
+ margin-bottom: 10px;
+ padding: 5px;
+ background-color: #0d8ac4;
+ color: #fff;
+ border: none;
+}
+.login-menu:hover {
+ cursor: pointer;
+}
+
+.login-cancle {
+ padding: 10px 0;
+ margin: 20px 0;
+ line-height: 30px;
+}
+
+.otherlinktext {
+ line-height: 35px;
+}
+.cancelbtn {
+ float: left;
+ background-color: #e74c3c;
+ margin-right: 12px;
+}
+
+span.psw {
+ float: right;
+ padding-top: 16px;
+}
+
+/* Add Zoom Animation */
+.animate {
+ -webkit-animation: animatezoom 0.6s;
+ animation: animatezoom 0.6s;
+}
+
+@-webkit-keyframes animatezoom {
+ from {
+  -webkit-transform: scale(0);
+ }
+ to {
+  -webkit-transform: scale(1);
+ }
+}
+
+@keyframes animatezoom {
+ from {
+  transform: scale(0);
+ }
+ to {
+  transform: scale(1);
+ }
+}
