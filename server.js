@@ -87,7 +87,7 @@ const isAuth = (req, res, next) => {
  if (req.session.isAuth) {
   next();
  } else {
-  res.redirect('/login');
+  res.redirect('/');
  }
 };
 
@@ -95,7 +95,8 @@ const islogedin = (req, res, next) => {
  if (req.session.isAuth) {
   res.redirect('/dashboard');
  } else {
-  res.redirect('/logout');
+  //res.redirect('/');
+  next();
  }
 };
 
@@ -104,20 +105,12 @@ app.get('/', islogedin, (req, res) => {
  res.render('login', { title: 'Attendance Tracker' });
 });
 
-app.get('/register', (req, res) => {
+app.get('/register', islogedin, (req, res) => {
  res.render('register', { title: 'Attendance Tracker' });
 });
 
-app.get('/login', islogedin, (req, res) => {
+app.get('/logout', islogedin, (req, res) => {
  res.render('login', { title: 'Attendance Tracker' });
-});
-
-app.get('/logout', (req, res) => {
- if (req.session.isAuth) {
-  res.redirect('/dashboard');
- } else {
-  res.render('login', { title: 'Attendance Tracker' });
- }
 });
 
 app.get('/dashboard', isAuth, (req, res) => {
@@ -131,25 +124,24 @@ app.get('/dashboard', isAuth, (req, res) => {
 });
 
 //-----------
-app.post('/login', async (req, res) => {
+app.post('/', async (req, res) => {
  const { email, password } = req.body;
- req.session.isAuth = true;
- sess = req.session;
- sess.userEmail = req.body.email;
-
  const user = await UserModel.findOne({ email }).lean();
  console.log(user.email);
 
+ //  sess = req.session;
+ //  sess.userEmail = req.body.email;
+
  if (!user) {
   console.log('Invalid username');
-  return res.redirect('/login');
+  return res.redirect('/');
  }
 
  const isMatch = await bcrypt.compare(password, user.password);
 
  if (!isMatch) {
   console.log('Invalid password');
-  return res.redirect('/login');
+  return res.redirect('/');
  }
 
  if (user) {
@@ -167,6 +159,7 @@ app.post('/register', async (req, res) => {
  let user = await UserModel.findOne({ email });
 
  if (user) {
+  console.log('given email already have an account');
   return res.redirect('/register');
  }
 
@@ -179,18 +172,7 @@ app.post('/register', async (req, res) => {
 
  await user.save();
 
- res.redirect('/login');
-
- //  try {
- //   users.push({
- //    id: Date().now().toString(),
- //    name: req.body.name,
- //    email: req.body.email,
- //    password: hashedPassword
- //   });
- //  } catch {
- //   res.redirect('/register');
- //  }
+ res.redirect('/');
 });
 
 app.post('/logout', (req, res) => {

@@ -12,6 +12,8 @@ let breakStart = document.getElementById('breakStart');
 let breakEnd = document.getElementById('breakEnd');
 let breakTotal = document.getElementById('breakTotal');
 
+const logoutBtn = document.getElementById('logoutBtn');
+
 const totalTime = document.getElementById('totalTime');
 
 const cMonth = document.getElementById('cMonth');
@@ -199,13 +201,8 @@ async function postData(e) {
  const response = await fetch('/api/v1/attendances', options);
  const json = await response.json();
  localStorage.clear();
- location.reload();
+ location.reload(); //this method reloads the current URL, like the Refresh button.
 }
-
-workInBtn.addEventListener('click', workIn);
-workOutBtn.addEventListener('click', postData);
-breakInBtn.addEventListener('click', breakIn);
-breakOutBtn.addEventListener('click', breakOut);
 
 function checkLocalStorage() {
  //Work Start
@@ -246,6 +243,17 @@ function checkLocalStorage() {
   console.log('Work Ended');
  }
 }
+
+//logout Btn
+function logOut() {
+ localStorage.clear();
+}
+
+workInBtn.addEventListener('click', workIn);
+workOutBtn.addEventListener('click', postData);
+breakInBtn.addEventListener('click', breakIn);
+breakOutBtn.addEventListener('click', breakOut);
+logoutBtn.addEventListener('click', logOut);
 
 function init() {
  list.innerHTML = '';
