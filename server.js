@@ -129,8 +129,8 @@ app.post('/', async (req, res) => {
  const user = await UserModel.findOne({ email }).lean();
  console.log(user.email);
 
- //  sess = req.session;
- //  sess.userEmail = req.body.email;
+ sess = req.session;
+ sess.userEmail = req.body.email;
 
  if (!user) {
   console.log('Invalid username');
