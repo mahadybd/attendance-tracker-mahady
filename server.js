@@ -71,7 +71,7 @@ app.use(
  session({
   name: process.env.SESS_NAME,
   secret: process.env.SESS_SECRET,
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   store: store,
   cookie: {
