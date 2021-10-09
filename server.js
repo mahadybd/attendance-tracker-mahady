@@ -101,19 +101,19 @@ const islogedin = (req, res, next) => {
 };
 
 //landing Page
-app.get('/', islogedin, (req, res) => {
+app.get('/', (req, res) => {
  res.render('login', { title: 'Attendance Tracker' });
 });
 
-app.get('/register', islogedin, (req, res) => {
+app.get('/register', (req, res) => {
  res.render('register', { title: 'Attendance Tracker' });
 });
 
-app.get('/logout', islogedin, (req, res) => {
+app.get('/logout', (req, res) => {
  res.render('login', { title: 'Attendance Tracker' });
 });
 
-app.get('/dashboard', isAuth, (req, res) => {
+app.get('/dashboard', (req, res) => {
  userName = req.session.userName;
  userEmail = req.session.userEmail;
  res.render('main', {
