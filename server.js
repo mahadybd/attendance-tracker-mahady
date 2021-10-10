@@ -71,7 +71,7 @@ app.use(
  session({
   name: process.env.SESS_NAME,
   secret: process.env.SESS_SECRET,
-  resave: true,
+  resave: false,
   saveUninitialized: false,
   store: store,
   cookie: {
@@ -101,19 +101,19 @@ const islogedin = (req, res, next) => {
 };
 
 //landing Page
-app.get('/', (req, res) => {
+app.get('/', islogedin, (req, res) => {
  res.render('login', { title: 'Attendance Tracker' });
 });
 
-app.get('/register', (req, res) => {
+app.get('/register', islogedin, (req, res) => {
  res.render('register', { title: 'Attendance Tracker' });
 });
 
-app.get('/logout', (req, res) => {
+app.get('/logout', islogedin, (req, res) => {
  res.render('login', { title: 'Attendance Tracker' });
 });
 
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', isAuth, (req, res) => {
  userName = req.session.userName;
  userEmail = req.session.userEmail;
  res.render('main', {
