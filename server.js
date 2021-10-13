@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const bcrypt = require('bcrypt');
+
 const jwt = require('jsonwebtoken');
 //const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
@@ -10,9 +10,11 @@ const dotenv = require('dotenv');
 const colors = require('colors');
 const morgan = require('morgan');
 
-const UserModel = require('./models/User');
 const connectDB = require('./config/db');
 const attendances = require('./routes/attendances');
+
+const appController = require('./controllers/appController');
+const isAuth = require('./middleware/is-auth');
 
 // Load Config
 dotenv.config({ path: './config/config.env' });
@@ -42,29 +44,18 @@ app.set('view engine', 'hbs');
 app.use(express.urlencoded({ extended: true }));
 
 const TWO_HOURS = 1000 * 60 * 60 * 2;
+const SESS_LIFETIME = TWO_HOURS;
 
-const {
- PORT = process.env.PORT || 5000,
- NODE_ENV = 'development',
-
- SESS_LIFETIME = TWO_HOURS
-} = process.env;
-
-const IN_PROD = NODE_ENV === 'production';
+const PORT = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV === 'development') {
  app.use(morgan('dev'));
 }
 
-//app.use('/login', basicroute);
-//app.use('/', require('./routes/index'));
-
 const store = new mongoDBSession({
  uri: process.env.MONGO_URI,
  collection: 'mySession'
 });
-let userName = null;
-let userEmail = null;
 
 //Session middleware
 app.use(
@@ -75,114 +66,30 @@ app.use(
   saveUninitialized: false,
   store: store,
   cookie: {
-   maxAge: SESS_LIFETIME,
-   sameSite: true,
-   secure: IN_PROD
+   maxAge: SESS_LIFETIME
   }
  })
 );
 
-//RedirectLogin middleware
-const isAuth = (req, res, next) => {
- if (req.session.isAuth) {
-  next();
- } else {
-  res.redirect('/');
- }
-};
+// Landing Page Routes ----------
+app.get('/', appController.getHomepage);
 
-const islogedin = (req, res, next) => {
- if (req.session.isAuth) {
-  res.redirect('/dashboard');
- } else {
-  //res.redirect('/');
-  next();
- }
-};
+// Login Page
+app.get('/login', appController.getLogin);
+app.post('/login', appController.postLogin);
 
-//landing Page
-app.get('/', islogedin, (req, res) => {
- res.render('login', { title: 'Attendance Tracker' });
-});
+// Register Page
+app.get('/register', appController.getRegister);
+app.post('/register', appController.postRegister);
 
-app.get('/register', islogedin, (req, res) => {
- res.render('register', { title: 'Attendance Tracker' });
-});
+// Dashboard Page
+app.get('/dashboard', isAuth, appController.getDashboard);
 
-app.get('/logout', islogedin, (req, res) => {
- res.render('login', { title: 'Attendance Tracker' });
-});
+//Logout page
+app.post('/logout', appController.postLogout);
 
-app.get('/dashboard', isAuth, (req, res) => {
- userName = req.session.userName;
- userEmail = req.session.userEmail;
- res.render('main', {
-  title: 'Attendance Tracker',
-  userName: userName,
-  userEmail: userEmail
- });
-});
-
-//-----------
-app.post('/', async (req, res) => {
- const { email, password } = req.body;
- const user = await UserModel.findOne({ email }).lean();
- console.log(user.email);
-
- sess = req.session;
- sess.userEmail = req.body.email;
-
- if (!user) {
-  console.log('Invalid username');
-  return res.redirect('/');
- }
-
- const isMatch = await bcrypt.compare(password, user.password);
-
- if (!isMatch) {
-  console.log('Invalid password');
-  return res.redirect('/');
- }
-
- if (user) {
-  req.session.userName = user.name;
-  req.session.userEmail = user.email;
-  req.session.isAuth = true;
-  res.redirect('/dashboard');
- }
-});
-//-------Login End-------
-
-app.post('/register', async (req, res) => {
- const { name, email, password } = req.body;
-
- let user = await UserModel.findOne({ email });
-
- if (user) {
-  console.log('given email already have an account');
-  return res.redirect('/register');
- }
-
- const hashedPassword = await bcrypt.hash(req.body.password, 10);
- user = new UserModel({
-  name,
-  email,
-  password: hashedPassword
- });
-
- await user.save();
-
- res.redirect('/');
-});
-
-app.post('/logout', (req, res) => {
- req.session.isAuth = false;
- req.session.destroy((err) => {
-  if (err) throw err;
-  res.clearCookie(process.env.SESS_NAME);
-  res.redirect('/logout');
- });
-});
+// API Routes
+app.use('/api/v1/attendances', attendances);
 
 app.listen(
  PORT,
@@ -190,6 +97,3 @@ app.listen(
   `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
  )
 );
-
-// Routes
-app.use('/api/v1/attendances', attendances);
