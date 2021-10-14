@@ -79,7 +79,7 @@ function workIn() {
 //Break time
 function breakIn() {
  const d = new Date();
- let breakInHours = d.getHours() + 3;
+ let breakInHours = d.getHours();
  let breakInMinutes = d.getMinutes();
  breakInTime = breakInHours + ':' + breakInMinutes;
  breakStart.innerHTML = breakInTime;
@@ -92,8 +92,8 @@ function breakIn() {
 
 function breakOut() {
  const d = new Date();
- let breakOutHours = d.getHours() + 3;
- let breakOutMinutes = d.getMinutes() + 30;
+ let breakOutHours = d.getHours();
+ let breakOutMinutes = d.getMinutes();
  breakOutTime = breakOutHours + ':' + breakOutMinutes;
  breakEnd.innerHTML = breakOutTime;
 
@@ -114,8 +114,8 @@ function breakOut() {
 
 function workOut() {
  const d = new Date();
- let workOutHours = d.getHours() + 2;
- let workOutMinutes = d.getMinutes() + 30;
+ let workOutHours = d.getHours();
+ let workOutMinutes = d.getMinutes();
  workOutTime = workOutHours + ':' + workOutMinutes;
  workEnd.innerHTML = workOutTime;
 

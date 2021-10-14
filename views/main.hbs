@@ -1,45 +1,44 @@
-<nav class="flex items-center justify-between flex-wrap bg-gray-800 p-6">
-    <div class="flex items-center flex-shrink-0 text-white mr-6">
+<nav class="flex flex-wrap justify-between bg-gray-800 p-6">
+    <div class="text-white mr-6">
         <span class="font-bold text-xl">{{title}}</span>
     </div>
-    <div class="w-full block flex-grow sm:flex sm:items-center sm:w-auto">
-        <div class="text-sm sm:flex-grow pt-0.5">
-            <a href="#" class="block mt-4 sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
-                Home
-            </a>
-            <a href="#" class="block mt-4 sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
-                Profile
-            </a>
-            <a href="#" class="block mt-4 sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
-                Setting
-            </a>
-            <a href="#" class="block mt-4 sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
-                Report
-            </a>
-        </div>
+    <div class="flex sm:flex-wrap text-sm mb-2">
+        <a href="#" class="block mt-1 sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
+            Home
+        </a>
+        <a href="#" class="block mt-1  sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
+            Profile
+        </a>
+        <a href="#" class="block mt-1  sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
+            Setting
+        </a>
+        <a href="#" class="block mt-1  sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
+            Report
+        </a>
+    </div>
+    <div class="flex sm:flex-wrap">
         <div class="text-white pr-1">
             Login as: <span id="userEmail">{{userEmail}}</span>
         </div>
-
-        <div>
+        <div class="sm:flex-wrap">
             <form action="/logout" method="POST">
                 <button id="logoutBtn"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Logout</button>
             </form>
-
         </div>
     </div>
+
 </nav>
 <main>
-    <div class="container max-w-md mx-auto bg-red-200 py-3">
-        <div class="font-bold my-2">Welcome <span id="userName">{{userName}}</span> </div>
+    <div class="container max-w-md mx-auto py-3">
+        <div class="font-bold text-center text-lg my-2">Welcome <span id="userName">{{userName}}</span> </div>
         <div class="font-bold flex justify-between border-b-2">
             <span id="current_date" class="current_date"></span>
             <span id="current_time" class="current_time"></span>
         </div>
 
         <div class="flex justify-between my-2">
-            <span class="time_type">Work</span>
+            <span class="font-bold text-lg leading-9">Work</span>
             <button id="workInBtn"
                 class="w-28 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">IN</button>
             <button id="workOutBtn"
@@ -47,7 +46,7 @@
         </div>
 
         <div class="flex justify-between my-2">
-            <span class="time_type">Break</span>
+            <span class="font-bold text-lg leading-9">Break</span>
             <button id="breakInBtn"
                 class="w-28 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled">IN</button>
             <button id="breakOutBtn"
@@ -55,7 +54,7 @@
         </div>
 
     </div>
-    <div class="container max-w-md mx-auto bg-yellow-100 pb-4">
+    <div class="container max-w-md mx-auto pb-4">
         <small>Today:</small>
         <div class="bg-white flex justify-between shadow-sm px-2 py-5">
             <div class="text-center border-r-2 w-full">
@@ -72,7 +71,7 @@
             </div>
         </div>
     </div>
-    <div class="container max-w-md mx-auto bg-green-200 py-3">
+    <div class="container max-w-md mx-auto py-3">
         <div class="font-bold border-b-2">
             <h3><span id="cMonth"></span> <span id="cYear"></span> Working Time</h3>
         </div>
@@ -81,7 +80,7 @@
                 <!-- <li>Day 1<span>01.04.2021</span><span>7 hr. 30 minute</span></li>-->
             </ul>
         </div>
-        <div class="font-bold bg-blue-300 px-2 py-1 mt-2 text-right">
+        <div class="font-bold bg-blue-500 px-2 py-1 mt-2 text-right">
             Total Time (Hours.): <span id="totalTime"></span>
         </div>
 

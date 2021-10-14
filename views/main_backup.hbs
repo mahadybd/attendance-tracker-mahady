@@ -1,62 +1,89 @@
-<nav>
-  Home | Report | Profile | <span id="userEmail">{{userEmail}}</span>
-</nav>
-
-
-
-<main>
-  <h1>Welcome <span id="userName">{{userName}}</span> </h1>
-  <section>
-    <div class="container">
-      <div class="current-date-time">
-        <span id="current_date" class="current_date"></span>
-        <span id="current_time" class="current_time"></span>
-      </div>
-
-      <div class="timer-controller">
-        <span class="time_type">Work</span>
-        <button id="workInBtn" class="btn">IN</button>
-        <button id="workOutBtn" class="btn disabled">OUT</button>
-      </div>
-      <div class="timer-controller">
-        <span class="time_type">Break</span>
-        <button id="breakInBtn" class="btn disabled">IN</button>
-        <button id="breakOutBtn" class="btn disabled">OUT</button>
-      </div>
-      <small>Today:</small>
-      <div class="inc-exp-container">
-        <div>
-          <h4>Working Time</h4>
-          <p id="workTotal" class="money plus"></p>
-          <small>start: <span id="workStart"></span></small>
-          <small>End: <span id="workEnd"></span></small>
-        </div>
-        <div>
-          <h4>Break Time</h4>
-          <p id="breakTotal" class="money minus"></p>
-          <small>start: <span id="breakStart"></span></small>
-          <small>End: <span id="breakEnd"></span></small>
-        </div>
-      </div>
-
-      <div>
-        <h3><span id="cMonth"></span> <span id="cYear"></span> Working Time</h3>
-        <ul id="list" class="list">
-          <!-- <li>Day 1<span>01.04.2021</span><span>7 hr. 30 minute</span></li>-->
-        </ul>
-      </div>
-      <div class="totalTime">
-        Total Time (Hours.): <span id="totalTime"></span>
-      </div>
-      <!-- <div>
-         <h3>History</h3>
-         <ul class="list">
-           <li><span>February 2021</span>7 hr. 30 minute</li>
-           <li><span>March 2021</span>7 hr. 30 minute</li>       
-           <li><span>April 2021</span>7 hr. 30 minute</li>
-         </ul>
-       </div> -->
+<nav class="flex items-center justify-between flex-wrap bg-gray-800 p-6">
+  <div class="flex items-center flex-shrink-0 text-white mr-6">
+    <span class="font-bold text-xl">{{title}}</span>
+  </div>
+  <div class="w-full block flex-grow sm:flex sm:items-center sm:w-auto">
+    <div class="text-sm sm:flex-grow pt-0.5">
+      <a href="#" class="block mt-4 sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
+        Home
+      </a>
+      <a href="#" class="block mt-4 sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
+        Profile
+      </a>
+      <a href="#" class="block mt-4 sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
+        Setting
+      </a>
+      <a href="#" class="block mt-4 sm:inline-block sm:mt-0 text-blue-400 hover:text-white mr-4">
+        Report
+      </a>
     </div>
-  </section>
+    <div class="text-white pr-1">
+      Login as: <span id="userEmail">{{userEmail}}</span>
+    </div>
 
+    <div>
+      <form action="/logout" method="POST">
+        <button id="logoutBtn"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Logout</button>
+      </form>
+
+    </div>
+  </div>
+</nav>
+<main>
+  <div class="container max-w-md mx-auto bg-red-200 py-3">
+    <div class="font-bold my-2">Welcome <span id="userName">{{userName}}</span> </div>
+    <div class="font-bold flex justify-between border-b-2">
+      <span id="current_date" class="current_date"></span>
+      <span id="current_time" class="current_time"></span>
+    </div>
+
+    <div class="flex justify-between my-2">
+      <span class="time_type">Work</span>
+      <button id="workInBtn"
+        class="w-28 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">IN</button>
+      <button id="workOutBtn"
+        class="w-28 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled">OUT</button>
+    </div>
+
+    <div class="flex justify-between my-2">
+      <span class="time_type">Break</span>
+      <button id="breakInBtn"
+        class="w-28 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled">IN</button>
+      <button id="breakOutBtn"
+        class="w-28 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled">OUT</button>
+    </div>
+
+  </div>
+  <div class="container max-w-md mx-auto bg-yellow-100 pb-4">
+    <small>Today:</small>
+    <div class="bg-white flex justify-between shadow-sm px-2 py-5">
+      <div class="text-center border-r-2 w-full">
+        <h4 class="text-base font-bold uppercase">Working Time</h4>
+        <p id="workTotal" class=""></p>
+        <small>start: <span id="workStart"></span></small>
+        <small>End: <span id="workEnd"></span></small>
+      </div>
+      <div class="text-center w-full">
+        <h4 class="text-base font-bold uppercase">Break Time</h4>
+        <p id="breakTotal" class=""></p>
+        <small>start: <span id="breakStart"></span></small>
+        <small>End: <span id="breakEnd"></span></small>
+      </div>
+    </div>
+  </div>
+  <div class="container max-w-md mx-auto bg-green-200 py-3">
+    <div class="font-bold border-b-2">
+      <h3><span id="cMonth"></span> <span id="cYear"></span> Working Time</h3>
+    </div>
+    <div class="justify-between mt-2">
+      <ul id="list" class="list">
+        <!-- <li>Day 1<span>01.04.2021</span><span>7 hr. 30 minute</span></li>-->
+      </ul>
+    </div>
+    <div class="font-bold bg-blue-300 px-2 py-1 mt-2 text-right">
+      Total Time (Hours.): <span id="totalTime"></span>
+    </div>
+
+  </div>
 </main>
