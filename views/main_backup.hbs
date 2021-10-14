@@ -1,0 +1,62 @@
+<nav>
+  Home | Report | Profile | <span id="userEmail">{{userEmail}}</span>
+</nav>
+
+
+
+<main>
+  <h1>Welcome <span id="userName">{{userName}}</span> </h1>
+  <section>
+    <div class="container">
+      <div class="current-date-time">
+        <span id="current_date" class="current_date"></span>
+        <span id="current_time" class="current_time"></span>
+      </div>
+
+      <div class="timer-controller">
+        <span class="time_type">Work</span>
+        <button id="workInBtn" class="btn">IN</button>
+        <button id="workOutBtn" class="btn disabled">OUT</button>
+      </div>
+      <div class="timer-controller">
+        <span class="time_type">Break</span>
+        <button id="breakInBtn" class="btn disabled">IN</button>
+        <button id="breakOutBtn" class="btn disabled">OUT</button>
+      </div>
+      <small>Today:</small>
+      <div class="inc-exp-container">
+        <div>
+          <h4>Working Time</h4>
+          <p id="workTotal" class="money plus"></p>
+          <small>start: <span id="workStart"></span></small>
+          <small>End: <span id="workEnd"></span></small>
+        </div>
+        <div>
+          <h4>Break Time</h4>
+          <p id="breakTotal" class="money minus"></p>
+          <small>start: <span id="breakStart"></span></small>
+          <small>End: <span id="breakEnd"></span></small>
+        </div>
+      </div>
+
+      <div>
+        <h3><span id="cMonth"></span> <span id="cYear"></span> Working Time</h3>
+        <ul id="list" class="list">
+          <!-- <li>Day 1<span>01.04.2021</span><span>7 hr. 30 minute</span></li>-->
+        </ul>
+      </div>
+      <div class="totalTime">
+        Total Time (Hours.): <span id="totalTime"></span>
+      </div>
+      <!-- <div>
+         <h3>History</h3>
+         <ul class="list">
+           <li><span>February 2021</span>7 hr. 30 minute</li>
+           <li><span>March 2021</span>7 hr. 30 minute</li>       
+           <li><span>April 2021</span>7 hr. 30 minute</li>
+         </ul>
+       </div> -->
+    </div>
+  </section>
+
+</main>

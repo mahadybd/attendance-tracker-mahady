@@ -7,14 +7,13 @@ exports.getHomepage = (req, res) => {
 
 exports.getLogin = (req, res) => {
  const error = req.session.error;
- delete req.session.error;
- res.render('login', { title: 'Attendance Tracker', err: error });
+ res.render('login', { title: 'Tracker 1.0', err: error });
+ //delete req.session.error;
 };
 
 exports.postLogin = async (req, res) => {
  const { email, password } = req.body;
  const user = await User.findOne({ email });
- console.log(user);
 
  if (!user) {
   req.session.error = 'Invalid Credentials';
@@ -68,7 +67,7 @@ exports.getDashboard = (req, res) => {
  userName = req.session.userName;
  userEmail = req.session.userEmail;
  res.render('main', {
-  title: 'Attendance Tracker',
+  title: 'Tracker 1.0',
   userName: userName,
   userEmail: userEmail
  });

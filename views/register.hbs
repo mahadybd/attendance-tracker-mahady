@@ -1,26 +1,43 @@
 <main>
-    <h1>Create new User</h1>
-    <samp id="err"></samp>
-    <div class="login-area">
-
-        <form action="/register" method="POST">
-            <div>
-                <label for="name"><b>Name</b></label>
-                <input type="text" id="name" placeholder="Enter Your Full Name" name="name" required />
-
-                <label for="email"><b>Email</b></label>
-                <input type="email" id="email" placeholder="Enter Your email" name="email" required />
-
-                <label for="password"><b>Password</b></label>
-                <input type="password" id="password" placeholder="Enter Password" name="password" required />
-
-                <button type="submit" class="btn login-btn">Register</button>
-                <span class="otherlinktext">Already registered ? <a href="/">login</a> here</span>
-            </div>
-
-        </form>
-
-
+    <div class="container">
+        <div class="bg-red-100 border-red-400 text-red-700 px-4 py-3 rounded relative my-5" role="alert">
+            <strong class="font-bold">Alert!</strong>
+            <span id="err" class="block sm:inline">{{error}}</span>
+        </div>
     </div>
 
+
+    <!-- Login Form -->
+    <div class="container">
+        <h1 class="text-center text-2xl">Register new user</h1>
+        <div class="max-w-sm mx-auto my-4 bg-white px-5 py-9 rounded shadow-xl">
+            <form action="/register" method="POST">
+                <div class="mt-3">
+                    <label for="name"><b>Name</b></label>
+                    <input type="text" id="name" class="block w-full p-2 border rounded border-gray-500"
+                        placeholder="Enter Your Full Name" name="name" required />
+                </div>
+                <div class="mt-3">
+                    <label for="email" class="font-bold block">Email</label>
+                    <input type="email" id="email" class="block w-full p-2 border rounded border-gray-500"
+                        placeholder="Enter Your email" name="email" required />
+                </div>
+                <div class="mt-3">
+                    <label for="password" class="font-bold block">Password</label>
+                    <input type="password" id="password" class="block w-full p-2 border rounded border-gray-500"
+                        placeholder="Enter Password" name="password" required />
+                </div>
+                <div class=" my-3 flex items-center justify-between ">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Register</button>
+                    <p class="text-grey-dark text-sm ">Already registered?&nbsp;<a
+                            class="no-underline hover:underline inline-block align-baseline font-bold text-sm float-right text-blue-500 hover:text-blue-700 "
+                            href="/login">login</a></p>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- Login Form End -->
 </main>

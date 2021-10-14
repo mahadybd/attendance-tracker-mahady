@@ -43,7 +43,7 @@ app.engine(
 app.set('view engine', 'hbs');
 app.use(express.urlencoded({ extended: true }));
 
-const TWO_HOURS = 1000 * 60 * 60 * 2;
+const TWO_HOURS = 1000 * 60 * 60 * 1;
 const SESS_LIFETIME = TWO_HOURS;
 
 const PORT = process.env.PORT || 5000;
