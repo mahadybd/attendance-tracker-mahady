@@ -261,7 +261,7 @@ function checkLocalStorage() {
   workOutTime = localStorage.getItem('workOutTime');
   workEnd.innerHTML = workOutTime;
 
-  workingTimeActual = localStorage.getItem('workOutTime');
+  workingTimeActual = localStorage.getItem('workingTimeActual');
   workTotal.innerHTML = workingTimeActual;
 
   console.log('Work Ended');
