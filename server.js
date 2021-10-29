@@ -12,10 +12,7 @@ const morgan = require('morgan');
 
 const connectDB = require('./config/db');
 const attendances = require('./routes/attendances');
-
-const appController = require('./controllers/appController');
-const isAuth = require('./middleware/is-auth');
-
+const basicroutes = require('./routes/basicroutes');
 // Load Config
 dotenv.config({ path: './config/config.env' });
 
@@ -66,30 +63,35 @@ app.use(
   saveUninitialized: false,
   store: store,
   cookie: {
+   httpOnly: true, // no one can access cookie. added this line 18.10.21
    maxAge: SESS_LIFETIME
   }
  })
 );
 
-// Landing Page Routes ----------
-app.get('/', appController.getHomepage);
-
-// Login Page
-app.get('/login', appController.getLogin);
-app.post('/login', appController.postLogin);
-
-// Register Page
-app.get('/register', appController.getRegister);
-app.post('/register', appController.postRegister);
-
-// Dashboard Page
-app.get('/dashboard', isAuth, appController.getDashboard);
-
-//Logout page
-app.post('/logout', appController.postLogout);
+// Basic Page Routes ----------
+app.use(basicroutes);
 
 // API Routes
 app.use('/api/v1/attendances', attendances);
+
+// 404 handler and pass error handler
+app.use((req, res, next) => {
+ const err = new Error('Not found');
+ err.status = 404;
+ next(err);
+});
+
+//Error
+app.use((err, req, res, next) => {
+ res.status(err.status || 500);
+ res.send({
+  error: {
+   status: err.status || 500,
+   message: err.message
+  }
+ });
+});
 
 app.listen(
  PORT,

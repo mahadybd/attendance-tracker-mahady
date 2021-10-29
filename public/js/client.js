@@ -61,10 +61,35 @@ function displayCurrentTime() {
  return (current_time.innerHTML = time.toLocaleString());
 }
 
+// Time separation from two time (hours, minutes)
+function totalMinutes(time) {
+ var parts = time.split(':');
+ return +parts[0] * 60 + +parts[1];
+}
+function timeDiff(time1, time2) {
+ var mins1 = totalMinutes(time1);
+ var mins2 = totalMinutes(time2);
+
+ // if (mins2 < mins1) {
+ //   mins2 += 1440
+ // }
+
+ var diff = mins2 - mins1;
+ var hours = '0' + Math.floor(diff / 60);
+ var minutes = '0' + (diff - hours * 60);
+ return hours.slice(-2) + ':' + minutes.slice(-2);
+}
+
+console.log(timeDiff('08:50', '11:02'));
+
+//------[ time separation end]-----------
+
 function workIn() {
  const d = new Date();
  let workInHours = d.getHours();
+ workInHours = workInHours > 9 ? workInHours : '0' + workInHours;
  let workInMinutes = d.getMinutes();
+ workInMinutes = workInMinutes > 9 ? workInMinutes : '0' + workInMinutes;
  workInTime = workInHours + ':' + workInMinutes;
 
  workInBtn.classList.add('disabled');
@@ -80,7 +105,9 @@ function workIn() {
 function breakIn() {
  const d = new Date();
  let breakInHours = d.getHours();
+ breakInHours = breakInHours > 9 ? breakInHours : '0' + breakInHours;
  let breakInMinutes = d.getMinutes();
+ breakInMinutes = breakInMinutes > 9 ? breakInMinutes : '0' + breakInMinutes;
  breakInTime = breakInHours + ':' + breakInMinutes;
  breakStart.innerHTML = breakInTime;
 
@@ -93,15 +120,15 @@ function breakIn() {
 function breakOut() {
  const d = new Date();
  let breakOutHours = d.getHours();
- let breakOutMinutes = d.getMinutes();
+ breakOutHours = breakOutHours > 9 ? breakOutHours : '0' + breakOutHours;
+ let breakOutMinutes = d.getMinutes() + 30;
+ breakOutMinutes =
+  breakOutMinutes > 9 ? breakOutMinutes : '0' + breakOutMinutes;
  breakOutTime = breakOutHours + ':' + breakOutMinutes;
  breakEnd.innerHTML = breakOutTime;
 
- let startTimeTemp = breakInTime.split(':');
- let endTimeTemp = breakOutTime.split(':');
- breakTimeTotal = `${endTimeTemp[0] - startTimeTemp[0]}:${
-  endTimeTemp[1] - startTimeTemp[1]
- }`;
+ breakTimeTotal = timeDiff(breakInTime, breakOutTime);
+
  breakTotal.innerHTML = breakTimeTotal;
 
  breakOutBtn.classList.add('disabled');
@@ -114,26 +141,17 @@ function breakOut() {
 
 function workOut() {
  const d = new Date();
- let workOutHours = d.getHours();
+ let workOutHours = d.getHours() + 04;
+ workOutHours = workOutHours > 9 ? workOutHours : '0' + workOutHours;
  let workOutMinutes = d.getMinutes();
+ workOutMinutes = workOutMinutes > 9 ? workOutMinutes : '0' + workOutMinutes;
  workOutTime = workOutHours + ':' + workOutMinutes;
  workEnd.innerHTML = workOutTime;
 
- let startTimeTemp = workInTime.split(':');
- let endTimeTemp = workOutTime.split(':');
- let workingTimeTotal = `${endTimeTemp[0] - startTimeTemp[0]}:${
-  endTimeTemp[1] - startTimeTemp[1]
- }`;
+ let workingTimeTotal = timeDiff(workInTime, workOutTime);
 
- let workingTimeTotalTemp = workingTimeTotal.split(':');
- let breakTimeTotalTemp = breakTimeTotal.split(':');
+ workingTimeActual = timeDiff(breakTimeTotal, workingTimeTotal);
 
- workingTimeActual =
-  breakTimeTotal !== '00:00'
-   ? `${workingTimeTotalTemp[0] - breakTimeTotalTemp[0]}:${
-      workingTimeTotalTemp[1] - breakTimeTotalTemp[1]
-     }`
-   : workingTimeTotal;
  workTotal.innerHTML = workingTimeActual;
 
  workOutBtn.classList.add('disabled');
@@ -141,6 +159,8 @@ function workOut() {
 
  localStorage.setItem('workOutTime', workOutTime);
  localStorage.setItem('workingTimeActual', workingTimeActual);
+
+ //localStorage.clear();
 
  return workingTimeActual;
 }
@@ -200,7 +220,7 @@ async function postData(e) {
  };
  const response = await fetch('/api/v1/attendances', options);
  const json = await response.json();
- localStorage.clear();
+ //localStorage.clear();
  location.reload(); //this method reloads the current URL, like the Refresh button.
 }
 
@@ -237,7 +257,11 @@ function checkLocalStorage() {
  }
  //Work End
  if (localStorage.getItem('workOutTime') != null) {
-  workingTimeActual = localStorage.getItem('workingTimeActual');
+  workInBtn.classList.remove('disabled');
+  workOutTime = localStorage.getItem('workOutTime');
+  workEnd.innerHTML = workOutTime;
+
+  workingTimeActual = localStorage.getItem('workOutTime');
   workTotal.innerHTML = workingTimeActual;
 
   console.log('Work Ended');

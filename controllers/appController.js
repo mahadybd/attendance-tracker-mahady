@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const { InvalidIdException, UserNotFoundException } = require('./errors');
 
 exports.getHomepage = (req, res) => {
  res.redirect('/login');
@@ -7,25 +8,22 @@ exports.getHomepage = (req, res) => {
 
 exports.getLogin = (req, res) => {
  const error = req.session.error;
- res.render('login', { title: 'Tracker 1.0', err: error });
- //delete req.session.error;
+ res.render('login');
 };
 
-exports.postLogin = async (req, res) => {
+exports.postLogin = async (req, res, next) => {
  const { email, password } = req.body;
  const user = await User.findOne({ email });
 
  if (!user) {
-  req.session.error = 'Invalid Credentials';
-  console.log('Invalid username');
+  next(new InvalidIdException());
   return res.redirect('/login');
  }
 
  const isMatch = await bcrypt.compare(password, user.password);
 
  if (!isMatch) {
-  req.session.error = 'Invalid Credentials';
-  console.log('Invalid password');
+  next(new UserNotFoundException());
   return res.redirect('/login');
  }
 
