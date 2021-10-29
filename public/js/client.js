@@ -121,7 +121,7 @@ function breakOut() {
  const d = new Date();
  let breakOutHours = d.getHours();
  breakOutHours = breakOutHours > 9 ? breakOutHours : '0' + breakOutHours;
- let breakOutMinutes = d.getMinutes() + 30;
+ let breakOutMinutes = d.getMinutes();
  breakOutMinutes =
   breakOutMinutes > 9 ? breakOutMinutes : '0' + breakOutMinutes;
  breakOutTime = breakOutHours + ':' + breakOutMinutes;
@@ -141,7 +141,7 @@ function breakOut() {
 
 function workOut() {
  const d = new Date();
- let workOutHours = d.getHours() + 04;
+ let workOutHours = d.getHours();
  workOutHours = workOutHours > 9 ? workOutHours : '0' + workOutHours;
  let workOutMinutes = d.getMinutes();
  workOutMinutes = workOutMinutes > 9 ? workOutMinutes : '0' + workOutMinutes;
