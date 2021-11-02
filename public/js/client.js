@@ -70,13 +70,23 @@ function timeDiff(time1, time2) {
  var mins1 = totalMinutes(time1);
  var mins2 = totalMinutes(time2);
 
- // if (mins2 < mins1) {
- //   mins2 += 1440
- // }
+ // if time goes to next day(mins1=11:50 , mins2= 00:10 )
+ if (mins2 < mins1) {
+  mins2 += 1440;
+ }
 
  var diff = mins2 - mins1;
  var hours = '0' + Math.floor(diff / 60);
  var minutes = '0' + (diff - hours * 60);
+ return hours.slice(-2) + ':' + minutes.slice(-2);
+}
+
+function timeSum(time1, time2) {
+ var mins1 = totalMinutes(time1);
+ var mins2 = totalMinutes(time2);
+ var diff = mins2 + mins1;
+ var hours = '0' + Math.floor(diff / 60);
+ var minutes = '0' + (diff + hours * 60);
  return hours.slice(-2) + ':' + minutes.slice(-2);
 }
 
@@ -111,6 +121,7 @@ function breakIn() {
  breakInTime = breakInHours + ':' + breakInMinutes;
  breakStart.innerHTML = breakInTime;
 
+ workInBtn.classList.add('disabled');
  breakInBtn.classList.add('disabled');
  workOutBtn.classList.add('disabled');
  breakOutBtn.classList.remove('disabled');
@@ -127,12 +138,19 @@ function breakOut() {
  breakOutTime = breakOutHours + ':' + breakOutMinutes;
  breakEnd.innerHTML = breakOutTime;
 
- breakTimeTotal = timeDiff(breakInTime, breakOutTime);
+ // multiple break time summing
+ if (localStorage.getItem('breakTimeTotal') != null) {
+  let t1 = localStorage.getItem('breakTimeTotal');
+  let t2 = timeDiff(breakInTime, breakOutTime);
+  breakTimeTotal = timeSum(t1, t2);
+ } else {
+  breakTimeTotal = timeDiff(breakInTime, breakOutTime);
+ }
 
  breakTotal.innerHTML = breakTimeTotal;
 
  breakOutBtn.classList.add('disabled');
- breakInBtn.classList.add('disabled');
+ breakInBtn.classList.remove('disabled');
  workOutBtn.classList.remove('disabled');
 
  localStorage.setItem('breakOutTime', breakOutTime);

@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
-
+const flash = require('connect-flash');
 const jwt = require('jsonwebtoken');
-//const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const mongoDBSession = require('connect-mongodb-session')(session);
 const dotenv = require('dotenv');
 const colors = require('colors');
 const morgan = require('morgan');
+const error = require('./middleware/error');
 
 const connectDB = require('./config/db');
 const attendances = require('./routes/attendances');
@@ -69,6 +69,8 @@ app.use(
  })
 );
 
+app.use(flash());
+
 // Basic Page Routes ----------
 app.use(basicroutes);
 
@@ -77,21 +79,13 @@ app.use('/api/v1/attendances', attendances);
 
 // 404 handler and pass error handler
 app.use((req, res, next) => {
- const err = new Error('Not found');
+ const err = new Error('page Not found!');
  err.status = 404;
  next(err);
 });
 
-//Error
-app.use((err, req, res, next) => {
- res.status(err.status || 500);
- res.send({
-  error: {
-   status: err.status || 500,
-   message: err.message
-  }
- });
-});
+//Error > middleware/error.js
+app.use(error);
 
 app.listen(
  PORT,

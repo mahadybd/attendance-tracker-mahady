@@ -1,14 +1,14 @@
 const bcrypt = require('bcrypt');
+const { request } = require('express');
 const User = require('../models/User');
 const { InvalidIdException, UserNotFoundException } = require('./errors');
-
 exports.getHomepage = (req, res) => {
  res.redirect('/login');
 };
 
 exports.getLogin = (req, res) => {
- const error = req.session.error;
- res.render('login');
+ const errors = req.flash('message', 'some error message') || [];
+ res.render('login', { errors });
 };
 
 exports.postLogin = async (req, res, next) => {
