@@ -1,12 +1,21 @@
 const Attendance = require('../models/Attendance');
 const router = require('../routes/attendances');
 
+function currentMonth() {
+ const d = new Date();
+ return d.toLocaleDateString('en-GB', { month: 'long' });
+}
+
 //@desc Get All attendances
 //@route GET /api/v1/attendances
 //@access Public
 exports.getAttendances = async (req, res, next) => {
  try {
-  const attendances = await Attendance.find({ email: req.session.userEmail });
+  let workMonth = currentMonth();
+  const attendances = await Attendance.find({
+   email: req.session.userEmail,
+   month: workMonth
+  });
 
   return res.status(200).json({
    success: true,
