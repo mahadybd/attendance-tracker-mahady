@@ -13,6 +13,7 @@ const error = require('./middleware/error');
 const connectDB = require('./config/db');
 const attendances = require('./routes/attendances');
 const basicroutes = require('./routes/basicroutes');
+
 // Load Config
 dotenv.config({ path: './config/config.env' });
 

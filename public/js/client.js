@@ -89,12 +89,10 @@ function timeSum(time1, time2) {
  var minutes = '0' + (diff + hours * 60);
  return hours.slice(-2) + ':' + minutes.slice(-2);
 }
-
-console.log(timeDiff('08:50', '11:02'));
-
 //------[ time separation end]-----------
 
 function workIn() {
+ localStorage.clear();
  const d = new Date();
  let workInHours = d.getHours();
  workInHours = workInHours > 9 ? workInHours : '0' + workInHours;
@@ -108,7 +106,6 @@ function workIn() {
 
  localStorage.setItem('workInTime', workInTime);
  workStart.innerHTML = workInTime;
- console.log(workInTime);
 }
 
 //Break time
@@ -126,6 +123,7 @@ function breakIn() {
  workOutBtn.classList.add('disabled');
  breakOutBtn.classList.remove('disabled');
  localStorage.setItem('breakInTime', breakInTime);
+ localStorage.setItem('breakStatus', 'in');
 }
 
 function breakOut() {
@@ -153,6 +151,7 @@ function breakOut() {
  breakInBtn.classList.remove('disabled');
  workOutBtn.classList.remove('disabled');
 
+ localStorage.setItem('breakStatus', 'out');
  localStorage.setItem('breakOutTime', breakOutTime);
  localStorage.setItem('breakTimeTotal', breakTimeTotal);
 }
@@ -246,43 +245,44 @@ function checkLocalStorage() {
  //Work Start
  if (localStorage.getItem('workInTime') != null) {
   workInBtn.classList.add('disabled');
-  breakInBtn.classList.remove('disabled');
   workOutBtn.classList.remove('disabled');
+  breakInBtn.classList.remove('disabled');
+
   workInTime = localStorage.getItem('workInTime');
   workStart.innerHTML = workInTime;
-  console.log('Work started' + ' ' + workInTime);
  }
  //break Start
- if (localStorage.getItem('breakInTime') != null) {
+ if (localStorage.getItem('breakStatus') == 'in') {
+  workInBtn.classList.add('disabled');
   breakInBtn.classList.add('disabled');
-  breakOutBtn.classList.remove('disabled');
   workOutBtn.classList.add('disabled');
+  breakOutBtn.classList.remove('disabled');
+
   breakInTime = localStorage.getItem('breakInTime');
   breakStart.innerHTML = breakInTime;
-  console.log('break started' + ' ' + breakInTime);
  }
  //break End
- if (localStorage.getItem('breakOutTime') != null) {
+ if (localStorage.getItem('breakStatus') == 'out') {
   breakOutBtn.classList.add('disabled');
+  breakInBtn.classList.remove('disabled');
   workOutBtn.classList.remove('disabled');
+
   breakOutTime = localStorage.getItem('breakOutTime');
   breakEnd.innerHTML = breakOutTime;
 
   breakTimeTotal = localStorage.getItem('breakTimeTotal');
   breakTotal.innerHTML = breakTimeTotal;
-
-  console.log('Break Ended' + ' ' + breakOutTime);
  }
  //Work End
  if (localStorage.getItem('workOutTime') != null) {
+  workOutBtn.classList.add('disabled');
+  breakInBtn.classList.add('disabled');
   workInBtn.classList.remove('disabled');
   workOutTime = localStorage.getItem('workOutTime');
   workEnd.innerHTML = workOutTime;
 
   workingTimeActual = localStorage.getItem('workingTimeActual');
   workTotal.innerHTML = workingTimeActual;
-
-  console.log('Work Ended');
  }
 }
 

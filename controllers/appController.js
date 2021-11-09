@@ -2,28 +2,30 @@ const bcrypt = require('bcrypt');
 const { request } = require('express');
 const User = require('../models/User');
 const { InvalidIdException, UserNotFoundException } = require('./errors');
+
 exports.getHomepage = (req, res) => {
  res.redirect('/login');
 };
 
 exports.getLogin = (req, res) => {
- const errors = req.flash('message', 'some error message') || [];
- res.render('login', { errors });
+ const errMessage = req.session.error;
+ res.render('login', { errMessage });
+ delete req.session.error;
 };
 
-exports.postLogin = async (req, res, next) => {
+exports.postLogin = async (req, res) => {
  const { email, password } = req.body;
  const user = await User.findOne({ email });
 
  if (!user) {
-  next(new InvalidIdException());
+  req.session.error = 'Invalid user ID';
   return res.redirect('/login');
  }
 
  const isMatch = await bcrypt.compare(password, user.password);
 
  if (!isMatch) {
-  next(new UserNotFoundException());
+  req.session.error = 'Wrong password!';
   return res.redirect('/login');
  }
 
@@ -34,9 +36,9 @@ exports.postLogin = async (req, res, next) => {
 };
 
 exports.getRegister = (req, res) => {
- const error = req.session.error;
+ const errMessage = req.session.error;
+ res.render('register', { title: 'Attendance Tracker', errMessage });
  delete req.session.error;
- res.render('register', { title: 'Attendance Tracker', err: error });
 };
 
 exports.postRegister = async (req, res) => {
@@ -45,7 +47,7 @@ exports.postRegister = async (req, res) => {
  let user = await User.findOne({ email });
 
  if (user) {
-  req.session.error = 'User already exists';
+  req.session.error = req.body.email + ' ' + 'user already exists';
   return res.redirect('/register');
  }
 
