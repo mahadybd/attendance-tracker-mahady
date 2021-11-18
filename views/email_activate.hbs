@@ -1,0 +1,29 @@
+<main>
+    <!-- Login Form -->
+    <div class="container">
+        <div class="max-w-sm mx-auto my-4 bg-white px-5 py-9 rounded shadow-xl">
+            <div {{#if errMessage}}class="font-bold text-red-700 border-red-400 bg-red-100 px-4 py-3 rounded my-5"
+                {{/if}} role="alert">
+                <strong></strong> {{errMessage}}
+            </div>
+            <div
+                class="flex flex-row items-center font-bold text-green-600 border-red-400 bg-green-100 px-4 py-3 rounded my-5">
+                <span class="pr-2"><svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg></span>
+                <p>A link has been sent to your email, please follow the instruction</p>
+            </div>
+            <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" href="/">Back to Home</a>
+
+        </div>
+
+    </div>
+    <div class="text-center mb-3">
+        <p class="text-grey-dark text-sm ">Don't have an account? <a href="/register"
+                class="no-underline text-blue font-bold hover:text-blue-700">Create an Account</a>.</p>
+    </div>
+    </div>
+    <!-- Login Form End -->
+</main>

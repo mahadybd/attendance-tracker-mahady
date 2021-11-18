@@ -1,7 +1,11 @@
 const bcrypt = require('bcrypt');
 const { request } = require('express');
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 const { InvalidIdException, UserNotFoundException } = require('./errors');
+
+dotenv.config({ path: '../config/config.env' });
 
 exports.getHomepage = (req, res) => {
  res.redirect('/login');
@@ -41,26 +45,30 @@ exports.getRegister = (req, res) => {
  delete req.session.error;
 };
 
-exports.postRegister = async (req, res) => {
- const { name, email, password } = req.body;
+exports.postRegister = async (req, res, next) => {
+ try {
+  const { name, email, password } = req.body;
 
- let user = await User.findOne({ email });
+  let user = await User.findOne({ email });
 
- if (user) {
-  req.session.error = req.body.email + ' ' + 'user already exists';
-  return res.redirect('/register');
+  if (user) {
+   req.session.error = req.body.email + ' ' + 'user already exists';
+   return res.redirect('/register');
+  }
+
+  const hasdPsw = await bcrypt.hash(password, 10);
+
+  user = new User({
+   name,
+   email,
+   password: hasdPsw
+  });
+
+  await user.save();
+  res.redirect('/email-activate');
+ } catch (error) {
+  next(error);
  }
-
- const hasdPsw = await bcrypt.hash(password, 10);
-
- user = new User({
-  name,
-  email,
-  password: hasdPsw
- });
-
- await user.save();
- res.redirect('/login');
 };
 
 exports.getDashboard = (req, res) => {
@@ -79,4 +87,71 @@ exports.postLogout = (req, res) => {
   res.clearCookie(process.env.SESS_NAME);
   res.redirect('/login');
  });
+};
+
+exports.getEmailActivate = (req, res) => {
+ res.render('email_activate', { title: 'Attendance Tracker' });
+};
+
+exports.getForgotPassword = (req, res) => {
+ const errMessage = req.session.error;
+ res.render('forgot-password', {
+  title: 'Enter your email address',
+  errMessage
+ });
+ delete req.session.error;
+};
+
+exports.postForgotPassword = async (req, res, next) => {
+ try {
+  let { email } = req.body;
+  let user = await User.findOne({ email });
+  console.log(user);
+
+  if (!user) {
+   req.session.error = `No user register with this email ${email}`;
+   return res.redirect('/forgot-password');
+  }
+
+  // Create one time valid link
+  const JWT_SECRET = process.env.JWT_SECRET;
+  const secret = JWT_SECRET + user.password;
+  const payload = {
+   email: user.email,
+   id: user._id
+  };
+  const token = jwt.sign(payload, secret, { expiresIn: '10m' });
+  const link = `${process.env.HOST_URL}/reset-password/${user._id}/${token}`;
+  console.log(link);
+
+  res.send(`Password reset link has been send to ${email}`);
+ } catch (error) {
+  next(error);
+ }
+};
+
+exports.getResetPassword = async (req, res, next) => {
+ try {
+  const { _id, token } = req.params;
+  console.log(_id);
+  let user = await User.findOne({ _id });
+  console.log(user);
+  // if this id exist in database
+  //   if (_id !== user._id) {
+  //    res.send('Invalid ID');
+  //    return;
+  //   }
+  // we have valid ID and we have valid user with this ID
+  const JWT_SECRET = process.env.JWT_SECRET;
+  const secret = JWT_SECRET + user.password;
+
+  const payload = jwt.verify(token, secret);
+  res.render('reset-password', { title: 'Enter your new Password' });
+ } catch (error) {
+  next(error);
+ }
+};
+
+exports.postResetPassword = (req, res) => {
+ res.send('Password has been successfully');
 };
