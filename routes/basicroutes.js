@@ -26,6 +26,9 @@ router
  .route('/forgot-password')
  .get(getForgotPassword)
  .post(postForgotPassword);
-router.route('/reset-password/:_id/:token').get(getResetPassword);
+router
+ .route('/reset-password/:_id/:token')
+ .get(getResetPassword)
+ .post(postResetPassword);
 
 module.exports = router;

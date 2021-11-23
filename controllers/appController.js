@@ -7,6 +7,8 @@ const { InvalidIdException, UserNotFoundException } = require('./errors');
 
 dotenv.config({ path: '../config/config.env' });
 
+const jwt_decode = require('jwt-decode');
+
 exports.getHomepage = (req, res) => {
  res.redirect('/login');
 };
@@ -106,7 +108,6 @@ exports.postForgotPassword = async (req, res, next) => {
  try {
   let { email } = req.body;
   let user = await User.findOne({ email });
-  console.log(user);
 
   if (!user) {
    req.session.error = `No user register with this email ${email}`;
@@ -131,20 +132,18 @@ exports.postForgotPassword = async (req, res, next) => {
 };
 
 exports.getResetPassword = async (req, res, next) => {
+ const { _id, token } = req.params;
+ console.log(_id);
+ let user = await User.findOne({ _id });
+ // if this id exist in database
+ //  if (_id !== user._id) {
+ //   res.send('Invalid ID');
+ //   return;
+ //  }
+ // we have valid ID and we have valid user with this ID
+ const JWT_SECRET = process.env.JWT_SECRET;
+ const secret = JWT_SECRET + user.password;
  try {
-  const { _id, token } = req.params;
-  console.log(_id);
-  let user = await User.findOne({ _id });
-  console.log(user);
-  // if this id exist in database
-  //   if (_id !== user._id) {
-  //    res.send('Invalid ID');
-  //    return;
-  //   }
-  // we have valid ID and we have valid user with this ID
-  const JWT_SECRET = process.env.JWT_SECRET;
-  const secret = JWT_SECRET + user.password;
-
   const payload = jwt.verify(token, secret);
   res.render('reset-password', { title: 'Enter your new Password' });
  } catch (error) {
@@ -152,6 +151,29 @@ exports.getResetPassword = async (req, res, next) => {
  }
 };
 
-exports.postResetPassword = (req, res) => {
- res.send('Password has been successfully');
+exports.postResetPassword = async (req, res, next) => {
+ const { _id, token } = req.params;
+ let user = await User.findOne({ _id });
+ const { password, password2 } = req.body;
+ // if this id exist in database
+ //  if (_id !== user._id) {
+ //   res.send('Invalid id');
+ //   return;
+ //  }
+
+ const JWT_SECRET = process.env.JWT_SECRET;
+ const secret = JWT_SECRET + user.password;
+ try {
+  const payload = jwt.verify(token, secret);
+  //validate password and password2 should match
+
+  //hash the password before save
+  const hasdPsw = await bcrypt.hash(password, 10);
+
+  user.password = hasdPsw;
+  await user.save();
+  res.send(`Password has been updated`);
+ } catch (error) {
+  next(error);
+ }
 };

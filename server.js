@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const session = require('express-session');
 const flash = require('connect-flash');
-const jwt = require('jsonwebtoken');
 const exphbs = require('express-handlebars');
 const mongoDBSession = require('connect-mongodb-session')(session);
 const dotenv = require('dotenv');
@@ -73,7 +72,7 @@ app.use(
 app.use(flash());
 
 // Basic Page Routes ----------
-app.use(basicroutes);
+app.use(basicroutes, express.static(__dirname + '/public'));
 
 // API Routes
 app.use('/api/v1/attendances', attendances);
