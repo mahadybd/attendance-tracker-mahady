@@ -7,6 +7,11 @@ const { InvalidIdException, UserNotFoundException } = require('./errors');
 
 dotenv.config({ path: '../config/config.env' });
 
+const mailgun = require('mailgun-js');
+const DOMAIN = 'sandbox7f5eb5ecb9a74ad893e173d6aae3cc6e.mailgun.org';
+const MAILGUN_APIKEY = 'b8fdd7c5c2f69c8870a138bc21d30e4a-7dcc6512-f5573585';
+const mg = mailgun({ apiKey: MAILGUN_APIKEY, domain: DOMAIN });
+
 const jwt_decode = require('jwt-decode');
 
 exports.getHomepage = (req, res) => {
@@ -124,6 +129,20 @@ exports.postForgotPassword = async (req, res, next) => {
   const token = jwt.sign(payload, secret, { expiresIn: '10m' });
   const link = `${process.env.HOST_URL}/reset-password/${user._id}/${token}`;
   console.log(link);
+
+  //send link to the email
+  const data = {
+   from: 'no-reply@mahadyhasan.com',
+   to: email,
+   subject: 'Reset password link',
+   html: `
+        <h2>Please click on the following link</h2>
+        <p>${link}</p>
+      `
+  };
+  mg.messages().send(data, function (error, body) {
+   console.log(body);
+  });
 
   res.send(`Password reset link has been send to ${email}`);
  } catch (error) {
