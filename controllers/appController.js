@@ -1,18 +1,34 @@
+//HOST_URL = 'https://myattendance-tracker-app.herokuapp.com'
+
 const bcrypt = require('bcrypt');
-const { request } = require('express');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-const { InvalidIdException, UserNotFoundException } = require('./errors');
+const nodemailer = require('nodemailer');
 
 dotenv.config({ path: '../config/config.env' });
 
-const mailgun = require('mailgun-js');
-const DOMAIN = 'sandbox7f5eb5ecb9a74ad893e173d6aae3cc6e.mailgun.org';
-const MAILGUN_APIKEY = 'b8fdd7c5c2f69c8870a138bc21d30e4a-7dcc6512-f5573585';
-const mg = mailgun({ apiKey: MAILGUN_APIKEY, domain: DOMAIN });
+const transporter = nodemailer.createTransport({
+ host: 'smtp.gmail.com',
+ port: 465,
+ secure: true,
+ service: 'gmail',
+ auth: {
+  type: 'login',
+  user: process.env.EMAILGUN_USER,
+  pass: process.env.EMAILGUN_PASS
+ },
+ tls: {
+  rejectUnauthorized: false
+ }
+});
 
-const jwt_decode = require('jwt-decode');
+const mailOptions = {
+ from: 'mahady@gmail.com',
+ to: 'marofbd@gmail.com',
+ subject: 'Sending Email using Node.js',
+ html: '<h1>Welcome</h1><p>That was easy!</p>'
+};
 
 exports.getHomepage = (req, res) => {
  res.redirect('/login');
@@ -131,17 +147,12 @@ exports.postForgotPassword = async (req, res, next) => {
   console.log(link);
 
   //send link to the email
-  const data = {
-   from: 'no-reply@mahadyhasan.com',
-   to: email,
-   subject: 'Reset password link',
-   html: `
-        <h2>Please click on the following link</h2>
-        <p>${link}</p>
-      `
-  };
-  mg.messages().send(data, function (error, body) {
-   console.log(body);
+  transporter.sendMail(mailOptions, function (error, info) {
+   if (error) {
+    console.log(error);
+   } else {
+    console.log('Email sent: ' + info.response);
+   }
   });
 
   res.send(`Password reset link has been send to ${email}`);

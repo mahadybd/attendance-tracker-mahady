@@ -1,18 +1,41 @@
 const mongoose = require('mongoose');
 
-const connectDB = async ()=> {
+const connectDB = async () => {
   try {
+    mongoose.set('strictQuery', false); // Adjust for mongoose updates
+
     const conn = await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
-      useCreateIndex: true,
-       useUnifiedTopology: true
+      useUnifiedTopology: true, // Ensure compatibility with the latest MongoDB driver
     });
 
     console.log(`MongoDB Connected: ${conn.connection.host}`.cyan.underline.bold);
   } catch (err) {
-    console.log(`Error: ${err.message}`.red);
-    process.exit(1);
+    console.error(`Error: ${err.message}`.red);
+    process.exit(1); // Exit process with failure
   }
-}
+};
 
 module.exports = connectDB;
+
+
+
+//-----------Backup old file-------------
+// const mongoose = require('mongoose');
+
+// const connectDB = async ()=> {
+//   try {
+//     const conn = await mongoose.connect(process.env.MONGO_URI, {
+//       useNewUrlParser: true,
+//       useCreateIndex: true,
+//        useUnifiedTopology: true
+//     });
+
+//     console.log(`MongoDB Connected: ${conn.connection.host}`.cyan.underline.bold);
+//   } catch (err) {
+//     console.log(`Error: ${err.message}`.red);
+//     process.exit(1);
+//   }
+// }
+
+// module.exports = connectDB;
