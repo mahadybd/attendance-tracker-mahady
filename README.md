@@ -1,3 +1,7 @@
+Certainly! Here's your updated `README.md` in a single-page format:
+
+---
+
 # Attendance Tracker
 
 A web application for tracking attendance. This project uses Node.js, Express, MongoDB, and Tailwind CSS for front-end styling. It supports features like authentication, session management, and email notifications.
@@ -49,7 +53,7 @@ A web application for tracking attendance. This project uses Node.js, Express, M
    ```
 
 3. **Set up environment variables**:
-   - Create a `.env` file in the root of your project and add the following variables:
+   - Create a `config.env` file in the root of your project and add the following variables:
      ```env
      NODE_ENV=development
      PORT=5000
@@ -61,13 +65,19 @@ A web application for tracking attendance. This project uses Node.js, Express, M
      EMAIL_PASS=your_email_password
      ```
 
-4. **Start the development server**:
+4. **Ignore the `config.env` file**:
+   - If you're using a `config.env` file for sensitive configuration, ensure that it is ignored by Git by adding the following line to your `.gitignore` file:
+     ```gitignore
+     /config/config.env
+     ```
+
+5. **Start the development server**:
    ```bash
    npm run dev
    ```
    This will run the server with `nodemon`, which automatically reloads when changes are detected.
 
-5. **Access the app**:
+6. **Access the app**:
    Open your browser and navigate to `http://localhost:5000`.
 
 ## Usage
@@ -100,3 +110,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Replace placeholders in the MongoDB URI and email credentials with actual values.
 - For issues or suggestions, please open an issue in the GitHub repository.
 
+---
